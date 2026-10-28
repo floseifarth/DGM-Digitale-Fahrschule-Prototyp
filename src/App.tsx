@@ -23,7 +23,8 @@ type IconName =
   | "menu"
   | "x"
   | "lock"
-  | "logout";
+  | "logout"
+  | "upload";
 
 const paths: Record<IconName, ReactNode> = {
   home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10M9 20v-6h6v6" /></>,
@@ -48,6 +49,7 @@ const paths: Record<IconName, ReactNode> = {
   x: <path d="m6 6 12 12M18 6 6 18" />,
   lock: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
   logout: <><path d="M10 17l5-5-5-5M15 12H3M14 3h7v18h-7" /></>,
+  upload: <><path d="M12 15V4M7 9l5-5 5 5" /><path d="M4 15v5h16v-5" /></>,
 };
 
 function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -90,11 +92,11 @@ function LandingHome({ onChoose }: { onChoose: (role: Role) => void }) {
       <div className="hero-orbit"><div className="orbit-ring" /><div className="orbit-center"><Icon name="spark" size={32} /><b>KI-Prognose</b><small>Individuell & transparent</small></div><span className="orbit-dot one" /><span className="orbit-dot two" /><span className="orbit-dot three" /></div>
     </section>
     <section className="entry-grid">
-      <article className="entry-card featured">
+      <article className="entry-card">
         <span className="entry-icon"><Icon name="search" size={30} /></span><span className="role-meta">Für Fahrschüler ohne Fahrschule</span><h2>Fahrschule finden</h2><p>Vergleiche Fahrschulen in deiner Nähe – mit Ranking aus echten Ausbildungsdaten und deiner persönlichen Prognose. Kostenlos.</p><Button onClick={() => onChoose("schoolSearch")}>Suche starten <Icon name="arrow" /></Button>
       </article>
       <article className="entry-card">
-        <span className="entry-icon"><Icon name="home" size={30} /></span><span className="role-meta">Für Fahrschüler, Fahrlehrer & Fahrschulen</span><h2>Meine Fahrschule</h2><p>Du bist bereits bei einer Fahrschule, die Digitale Fahrschule nutzt? Hier geht&apos;s zu deiner Ansicht.</p><div className="entry-chips"><span>Fahrschüler</span><span>Fahrlehrer</span><span>Fahrschulbüro</span></div><Button kind="secondary" onClick={() => onChoose("roleSelection")}>Weiter zur Rollenwahl <Icon name="arrow" /></Button>
+        <span className="entry-icon"><Icon name="home" size={30} /></span><span className="role-meta">Für Fahrschüler, Fahrlehrer & Fahrschulen</span><h2>Meine Fahrschule</h2><p>Du bist bereits bei einer Fahrschule, die Digitale Fahrschule nutzt? Hier geht&apos;s zu deiner Ansicht.</p><div className="entry-chips"><span>Fahrschüler</span><span>Fahrlehrer</span><span>Fahrschulbüro</span></div><Button onClick={() => onChoose("roleSelection")}>Weiter zur Rollenwahl <Icon name="arrow" /></Button>
       </article>
     </section>
     <footer className="home-footer"><span>Prototyp – studentisches Konzeptprojekt, Hochschule Esslingen</span><span>Alle Daten sind fiktiv</span></footer>
@@ -153,7 +155,7 @@ function SchoolSearchApp({ onHome, onRequest, onStudent }: { onHome: () => void;
       {detail && !sent && <div className="screen-pad school-detail"><button className="back-link" onClick={() => setDetail(null)}><Icon name="arrow" /> Zur Ergebnisliste</button><div className="detail-hero"><span className="class-badge">Platz {sorted.indexOf(detail) + 1}</span><h2>{detail.name}</h2><p><Icon name="home" /> {detail.address}</p></div><div className="detail-facts"><div><Icon name="users" /><b>{detail.teachers}</b><span>Fahrlehrer</span></div><div><Icon name="car" /><b>{detail.cars.split(" ")[0]}</b><span>Fahrzeuge</span></div><div><Icon name="calendar" /><b>4,6</b><span>Tage Wartezeit</span></div></div><h3 className="subheading">Preisübersicht</h3><div className="card price-list">{[["Grundbetrag","449 €"],["Fahrstunde (45 Min.)","69 €"],["Sonderfahrt (45 Min.)","79 €"]].map(x => <div key={x[0]}><span>{x[0]}</span><b>{x[1]}</b></div>)}</div><h3 className="subheading">Daten aus der Plattform</h3><div className="card platform-stats">{[["Ø Fahrstunden bis Prüfung",`${detail.lessons} Std.`,72],["Ø Gesamtkosten",`${detail.cost.toLocaleString("de-DE")} €`,65],["Bestehensquote Theorie","84 %",84],["Bestehensquote Praxis",`${detail.pass} %`,detail.pass],["Wartezeit nächste Stunde","4,6 Tage",58]].map(([name,val,width]) => <div key={name}><span><small>{name}</small><b>{val}</b></span><ProgressBar value={Number(width)} /></div>)}</div><div className="search-prediction"><Icon name="spark" /><div><span className="eyebrow">Deine Prognose bei dieser Fahrschule</span><strong>Ca. {detail.weeks} Wochen · ca. {detail.personal.toLocaleString("de-DE")} €</strong><small>Basierend auf deinen Angaben und anonymisierten Ausbildungsdaten.</small></div></div><Button className="full" onClick={() => setForm(true)}>Anmeldung anfragen</Button><p className="free-note">Kostenlos und unverbindlich für Fahrschüler</p></div>}
       {sent && <div className="screen-pad request-success"><div className="success-check"><Icon name="check" size={32} /></div><span className="eyebrow">Erfolgreich übermittelt</span><h2>Anfrage gesendet</h2><p>Die Fahrschule meldet sich bei dir. Deine Anfrage ist jetzt auch im Fahrschulbüro sichtbar.</p><div className="card success-school"><Icon name="home" /><div><strong>{detail?.name}</strong><small>Klasse {license} · unverbindliche Anfrage</small></div></div><Button className="full" onClick={onStudent}>Weiter zur Fahrschüler-App <Icon name="arrow" /></Button><Button kind="ghost" className="full" onClick={onHome}>Zur Rollenwahl</Button></div>}
     </div>
-    {info && <Modal onClose={() => setInfo(false)}><button className="modal-close" onClick={() => setInfo(false)}><Icon name="x" /></button><span className="modal-icon"><Icon name="info" /></span><h3>Unabhängiges Ranking</h3><p>Berücksichtigt werden ausschließlich echte Plattformdaten wie Ausbildungsdauer, Kosten, Wartezeiten und Bestehensquoten. Der monatliche Listungsbeitrag hat keinen Einfluss auf die Reihenfolge.</p><Button onClick={() => setInfo(false)}>Verstanden</Button></Modal>}
+    {info && <Modal onClose={() => setInfo(false)}><button className="modal-close" onClick={() => setInfo(false)}><Icon name="x" /></button><span className="modal-icon"><Icon name="info" /></span><h3>Unabhängiges Ranking</h3><p>Berücksichtigt werden ausschließlich echte Plattformdaten wie Ausbildungsdauer, Kosten, Wartezeiten und Bestehensquoten. Die Listung ist für Fahrschulen kostenlos – eine bessere Platzierung kann nicht gekauft werden.</p><Button onClick={() => setInfo(false)}>Verstanden</Button></Modal>}
     {form && <Modal onClose={() => setForm(false)}><button className="modal-close" onClick={() => setForm(false)}><Icon name="x" /></button><span className="eyebrow">Unverbindliche Anmeldung</span><h3>Anfrage senden</h3><p>{detail?.name}</p><div className="request-form"><label><span>Name</span><input defaultValue="Sophie Keller" /></label><label><span>Geburtsdatum</span><input type="date" defaultValue="2007-05-18" /></label><label><span>E-Mail oder Telefon</span><input defaultValue="sophie.keller@beispiel.de" /></label></div><Button className="full" onClick={submit}>Anfrage verbindlich senden</Button><small className="muted">Es werden keine echten Daten übertragen.</small></Modal>}
   </div></div>;
 }
@@ -289,7 +291,7 @@ function TeacherProfile() {
   return <div className="screen-pad"><span className="eyebrow">Dein Konto</span><h2>Profil</h2><div className="profile-head card"><div className="avatar large">TW</div><div><h3>Thomas Weber</h3><span>Fahrlehrer · Klasse B/BE</span><small>Fahrschule Musterstadt</small></div></div><div className="profile-stats"><div><b>28</b><span>Schüler</span></div><div><b>81 %</b><span>Auslastung</span></div><div><b>4,9</b><span>Bewertung</span></div></div><div className="card info-list"><div><span className="list-icon"><Icon name="car" /></span><p><small>Standardfahrzeug</small><strong>VW Golf · ES-DF 102</strong></p></div><div><span className="list-icon"><Icon name="calendar" /></span><p><small>Arbeitszeiten</small><strong>Mo – Fr, 08:00 – 18:00</strong></p></div></div></div>;
 }
 
-const officeNav = [["Dashboard", "home"], ["Schüler", "users"], ["Fahrschulsuche", "search"], ["Fahrlehrer", "user"], ["Fahrzeuge", "car"], ["Theorie", "book"], ["Abrechnung", "wallet"], ["Einstellungen", "settings"]] as [string, IconName][];
+const officeNav = [["Dashboard", "home"], ["Schüler", "users"], ["Fahrschulsuche", "search"], ["Fahrlehrer", "user"], ["Fahrzeuge", "car"], ["Theorie", "book"], ["Abrechnung", "wallet"], ["Datenimport", "upload"], ["Einstellungen", "settings"]] as [string, IconName][];
 
 function OfficeApp({ onHome, booking, searchRequest, accepted, onAccept }: { onHome: () => void; booking: boolean; searchRequest: boolean; accepted: boolean; onAccept: () => void }) {
   const [page, setPage] = useState("Dashboard");
@@ -297,7 +299,7 @@ function OfficeApp({ onHome, booking, searchRequest, accepted, onAccept }: { onH
   return <div className="office-shell">
     <aside className={menu ? "sidebar open" : "sidebar"}><div className="sidebar-logo"><Logo /></div><span className="workspace-label">ARBEITSBEREICH</span><nav>{officeNav.map(([label, icon]) => <button className={page === label ? "active" : ""} key={label} onClick={() => { setPage(label); setMenu(false); }}><Icon name={icon} />{label}{label === "Schüler" && <span>86</span>}</button>)}</nav><div className="sidebar-bottom"><button onClick={onHome}><Icon name="logout" /> Rollenwahl</button><div className="user-chip"><div className="avatar">AM</div><div><strong>Anna Müller</strong><span>Verwaltung</span></div></div></div></aside>
     <div className="office-main"><header className="office-header"><button className="mobile-menu" onClick={() => setMenu(!menu)}><Icon name="menu" /></button><div><span className="eyebrow">Fahrschule Musterstadt</span><strong>{page}</strong></div><div className="header-actions"><button className="icon-btn"><Icon name="search" /></button><button className="icon-btn"><Icon name="bell" /></button><div className="avatar">AM</div></div></header>
-      <main className="office-content">{page === "Dashboard" && <OfficeDashboard booking={booking} navigate={setPage} />}{page === "Schüler" && <OfficeStudents accepted={accepted} />}{page === "Fahrschulsuche" && <OfficeSchoolSearch searchRequest={searchRequest} accepted={accepted} onAccept={onAccept} />}{page === "Fahrlehrer" && <OfficeTeachers />}{page === "Fahrzeuge" && <OfficeVehicles />}{page === "Theorie" && <OfficeTheory />}{page === "Abrechnung" && <OfficeBilling />}{page === "Einstellungen" && <OfficeSettings />}</main>
+      <main className="office-content">{page === "Dashboard" && <OfficeDashboard booking={booking} navigate={setPage} />}{page === "Schüler" && <OfficeStudents accepted={accepted} />}{page === "Fahrschulsuche" && <OfficeSchoolSearch searchRequest={searchRequest} accepted={accepted} onAccept={onAccept} />}{page === "Fahrlehrer" && <OfficeTeachers />}{page === "Fahrzeuge" && <OfficeVehicles />}{page === "Theorie" && <OfficeTheory />}{page === "Abrechnung" && <OfficeBilling />}{page === "Datenimport" && <OfficeImport />}{page === "Einstellungen" && <OfficeSettings />}</main>
     </div>
   </div>;
 }
@@ -337,7 +339,7 @@ function OfficeSchoolSearch({ searchRequest, accepted, onAccept }: { searchReque
   ];
   return <><PageHead eyebrow="Region Esslingen" title="Fahrschulsuche"><Button kind="secondary" onClick={() => setListing(!listing)}>Listung verwalten</Button></PageHead>
     {accepted && <div className="license-notice"><Icon name="check" /><div><strong>Sophie Keller wurde als Schülerin übernommen.</strong><span>Die Lizenz pro Schüler wird ab Ausbildungsstart berechnet.</span></div></div>}
-    <section className="listing-status panel"><div><span className={listing ? "listing-dot active" : "listing-dot"} /><div><span className="eyebrow">Öffentliches Profil</span><h3>{listing ? "Listung aktiv" : "Listung pausiert"}</h3><p>Ihre Fahrschule wird Fahrschülern in der Region angezeigt.</p></div></div><div><small>Monatlicher Listungsbeitrag</small><strong>49,00 €</strong><Button kind="secondary" onClick={() => setListing(!listing)}>{listing ? "Listung pausieren" : "Listung aktivieren"}</Button></div></section>
+    <section className="listing-status panel"><div><span className={listing ? "listing-dot active" : "listing-dot"} /><div><span className="eyebrow">Öffentliches Profil</span><h3>{listing ? "Listung aktiv" : "Listung pausiert"}</h3><p>Ihre Fahrschule wird Fahrschülern in der Region angezeigt.</p></div></div><div><small>Listung in der Fahrschulsuche</small><strong>Kostenlos</strong><Button kind="secondary" onClick={() => setListing(!listing)}>{listing ? "Listung pausieren" : "Listung aktivieren"}</Button></div></section>
     <div className="metric-grid search-metrics">{[["Profilaufrufe diesen Monat","412","+18 %","search"],["Anfragen",searchRequest ? "24" : "23","+5 diese Woche","users"],["Daraus Anmeldungen",accepted ? "10" : "9","39 % Konversion","check"],["Rang in der Region","Platz 3","von 14 Fahrschulen","chart"]].map((m,i) => <div className="metric-card" key={m[0]}><div className={`metric-icon tone-${i}`}><Icon name={m[3] as IconName} /></div><span>{m[0]}</span><strong>{m[1]}</strong><small>{m[2]}</small></div>)}</div>
     <div className="search-office-grid"><section className="panel request-panel"><div className="panel-head"><div><span className="eyebrow">Direkt aus der Suche</span><h3>Neue Anfragen</h3></div><span className="status-live"><i /> Echtzeit</span></div>{requests.filter(r => !rejected.includes(r[0])).map((r,i) => <div className={i === 0 && searchRequest ? "request-row new" : "request-row"} key={r[0]}><span className="avatar">{r[0].split(" ").map(x => x[0]).join("")}</span><div><strong>{r[0]}</strong><small>{r[1]} · Klasse {r[2]}</small></div><Button kind="secondary" onClick={() => setRejected([...rejected, r[0]])}>Ablehnen</Button><Button onClick={r[0] === "Sophie Keller" ? onAccept : () => setRejected([...rejected, r[0]])}>Annehmen</Button></div>)}</section>
     <section className="panel rank-tips"><div className="panel-head"><div><span className="eyebrow">Plattformdaten</span><h3>So verbessern Sie Ihren Rang</h3></div><Icon name="spark" /></div>{[["Wartezeit senken","Aktuell 4,6 Tage · Region Ø 3,9 Tage"],["Stundenkontinuität erhöhen","12 % Ihrer Schüler warten länger als 7 Tage"],["Praxisquote stabilisieren","78 % bestanden · Region Ø 76 %"]].map((t,i) => <div className="tip-row" key={t[0]}><span>{i+1}</span><div><strong>{t[0]}</strong><small>{t[1]}</small></div></div>)}<p className="rank-note"><Icon name="info" /> Der Rang basiert nur auf Ausbildungsdaten und kann nicht gekauft werden.</p></section></div>
@@ -362,7 +364,82 @@ function OfficeTheory() {
 
 function OfficeBilling() {
   const rows = [["RE-2025-184", "Lena M.", "420,00 €", "05.11.2025", "Bezahlt"], ["RE-2025-183", "Jonas Wolf", "510,00 €", "03.11.2025", "Offen"], ["RE-2025-182", "Sara Klein", "255,00 €", "01.11.2025", "Bezahlt"], ["RE-2025-181", "Mia Neumann", "340,00 €", "29.10.2025", "Überfällig"]];
-  return <><PageHead eyebrow="Finanzen" title="Abrechnung"><Button><Icon name="plus" /> Neue Rechnung</Button></PageHead><div className="billing-metrics"><div className="panel"><span>Umsatz November</span><b>18.420,00 €</b><small>+8,4 % zum Vormonat</small></div><div className="panel"><span>Offene Rechnungen</span><b>4.270,00 €</b><small>12 Rechnungen</small></div><div className="panel"><span>Überfällig</span><b>680,00 €</b><small className="danger-text">2 Rechnungen prüfen</small></div></div><section className="panel platform-costs"><div className="panel-head"><div><span className="eyebrow">Plattformkosten</span><h3>Abrechnung Digitale Fahrschule</h3></div><span>November 2025</span></div><div><span className="cost-symbol"><Icon name="users" /></span><div><strong>Lizenzen pro Fahrschüler</strong><small>86 aktive Lizenzen × 8,90 €</small></div><b>765,40 €</b></div><div><span className="cost-symbol"><Icon name="search" /></span><div><strong>Listungsbeitrag Fahrschulsuche</strong><small>Monatliche Listung · Region Esslingen</small></div><b>49,00 €</b></div><footer><span>Summe Plattformkosten</span><strong>814,40 €</strong></footer></section><div className="data-table panel billing-table"><div className="table-row table-head"><span>Rechnung</span><span>Schüler</span><span>Betrag</span><span>Datum</span><span>Status</span></div>{rows.map((r,i) => <button className="table-row" key={r[0]}><span><b>{r[0]}</b></span><span>{r[1]}</span><span><b>{r[2]}</b></span><span>{r[3]}</span><span><i className={`status-tag ${i===3 ? "status-pause" : i===1 ? "status-exam" : "status-active"}`}>{r[4]}</i></span></button>)}</div></>;
+  return <><PageHead eyebrow="Finanzen" title="Abrechnung"><Button><Icon name="plus" /> Neue Rechnung</Button></PageHead><div className="billing-metrics"><div className="panel"><span>Umsatz November</span><b>18.420,00 €</b><small>+8,4 % zum Vormonat</small></div><div className="panel"><span>Offene Rechnungen</span><b>4.270,00 €</b><small>12 Rechnungen</small></div><div className="panel"><span>Überfällig</span><b>680,00 €</b><small className="danger-text">2 Rechnungen prüfen</small></div></div><section className="panel platform-costs"><div className="panel-head"><div><span className="eyebrow">Plattformkosten</span><h3>Abrechnung Digitale Fahrschule</h3></div><span>November 2025</span></div><div><span className="cost-symbol"><Icon name="users" /></span><div><strong>Lizenzen pro Fahrschüler</strong><small>86 aktive Lizenzen × 8,90 €</small></div><b>765,40 €</b></div><div><span className="cost-symbol"><Icon name="search" /></span><div><strong>Listung Fahrschulsuche</strong><small>Region Esslingen · für Fahrschulen kostenlos</small></div><b>0,00 €</b></div><footer><span>Summe Plattformkosten</span><strong>765,40 €</strong></footer></section><div className="data-table panel billing-table"><div className="table-row table-head"><span>Rechnung</span><span>Schüler</span><span>Betrag</span><span>Datum</span><span>Status</span></div>{rows.map((r,i) => <button className="table-row" key={r[0]}><span><b>{r[0]}</b></span><span>{r[1]}</span><span><b>{r[2]}</b></span><span>{r[3]}</span><span><i className={`status-tag ${i===3 ? "status-pause" : i===1 ? "status-exam" : "status-active"}`}>{r[4]}</i></span></button>)}</div></>;
+}
+
+type ImportField = "name" | "birth" | "license" | "email" | "phone";
+type ImportRow = Record<ImportField, string> & { id: number; source: string; unclear: ImportField[] };
+const importFields = [["name", "Name"], ["birth", "Geburtsdatum"], ["license", "Klasse"], ["email", "E-Mail"], ["phone", "Telefon"]] as [ImportField, string][];
+const importHints: Record<ImportField, string> = { name: "Name nicht eindeutig lesbar", birth: "Datum unvollständig", license: "Keine Klasse erkannt", email: "E-Mail-Adresse unvollständig", phone: "Telefonnummer zu kurz" };
+const importLicenses = ["A", "A1", "A2", "AM", "B", "BE", "B196", "C", "CE"];
+const importAccept = ".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg,.heic";
+// Simulierte Texterkennung – im Prototyp liefert jeder Import dieselbe Beispielliste.
+const importSample: Omit<ImportRow, "id" | "source">[] = [
+  { name: "Marie Schuster", birth: "14.03.2007", license: "B", email: "marie.schuster@web.de", phone: "0151 2384710", unclear: [] },
+  { name: "Paul Hoffmann", birth: "02.11.2006", license: "B", email: "p.hoffmann@gmx.de", phone: "0176 9921034", unclear: [] },
+  { name: "Lina Braun", birth: "2?.08.2007", license: "B", email: "lina.braun@mail.de", phone: "0160 4471", unclear: ["birth", "phone"] },
+  { name: "Tim Rch?er", birth: "19.01.2005", license: "A", email: "tim.r@outlook.de", phone: "0157 3302918", unclear: ["name"] },
+  { name: "Clara Vogel", birth: "07.06.2007", license: "", email: "clara.vogel@web.de", phone: "0152 7781203", unclear: ["license"] },
+  { name: "Ben Schröder", birth: "23.09.2006", license: "BE", email: "ben.schroeder@gmx", phone: "0170 5520187", unclear: ["email"] },
+  { name: "Emma Lehmann", birth: "30.12.2007", license: "B", email: "emma.lehmann@web.de", phone: "0162 8810452", unclear: [] },
+];
+
+function OfficeImport() {
+  const [step, setStep] = useState<"upload" | "loading" | "review" | "done">("upload");
+  const [files, setFiles] = useState<File[]>([]);
+  const [drag, setDrag] = useState(false);
+  const [rejected, setRejected] = useState<string[]>([]);
+  const [rows, setRows] = useState<ImportRow[]>([]);
+  const [added, setAdded] = useState(0);
+  const addFiles = (list: FileList | null) => {
+    if (!list) return;
+    const all = Array.from(list);
+    const ok = all.filter(f => /\.(xlsx|xls|csv|pdf|png|jpe?g|heic)$/i.test(f.name));
+    setRejected(all.filter(f => !ok.includes(f)).map(f => f.name));
+    setFiles(prev => [...prev, ...ok.filter(f => !prev.some(p => p.name === f.name))]);
+  };
+  const runImport = () => { setStep("loading"); setTimeout(() => { setRows(importSample.map((r, i) => ({ ...r, id: i, source: files[i % files.length].name }))); setStep("review"); }, 1800); };
+  const update = (id: number, field: ImportField, value: string) => setRows(rows.map(r => r.id === id ? { ...r, [field]: value, unclear: r.unclear.filter(u => u !== field) } : r));
+  const confirm = (id: number) => setRows(rows.map(r => r.id === id ? { ...r, unclear: [] } : r));
+  const remove = (id: number) => setRows(rows.filter(r => r.id !== id));
+  const open = rows.filter(r => r.unclear.length > 0).length;
+  const missing = rows.filter(r => !r.name.trim() || !r.license).length;
+  const finish = () => { setAdded(rows.length); setRows([]); setFiles([]); setStep("done"); };
+  const reset = () => { setRows([]); setFiles([]); setRejected([]); setStep("upload"); };
+  const fileType = (name: string) => /\.pdf$/i.test(name) ? "PDF" : /\.(png|jpe?g|heic)$/i.test(name) ? "Bild" : "Excel";
+
+  return <><PageHead eyebrow="Schülerdaten übertragen" title="Datenimport">{step === "review" && <Button kind="secondary" onClick={reset}>Neuen Import starten</Button>}</PageHead>
+    <div className="import-steps">{["Dateien hochladen", "Daten prüfen", "Schüler hinzufügen"].map((s, i) => { const current = step === "upload" || step === "loading" ? 0 : step === "review" ? 1 : 2; return <span className={i < current || step === "done" ? "done" : i === current ? "active" : ""} key={s}><b>{i < current || step === "done" ? <Icon name="check" size={12} /> : i + 1}</b>{s}</span>; })}</div>
+
+    {step === "done" && <section className="panel import-done"><span className="modal-icon"><Icon name="check" /></span><h3>{added} Schüler wurden hinzugefügt</h3><p>Die Fahrschüler erhalten eine Einladung per E-Mail und erscheinen nach der Registrierung in der Schülerliste.</p><Button onClick={reset}><Icon name="upload" /> Weitere Liste importieren</Button></section>}
+
+    {(step === "upload" || step === "loading") && <section className="panel import-upload">
+      <label className={`import-drop${drag ? " drag" : ""}${step === "loading" ? " busy" : ""}`} onDragOver={e => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={e => { e.preventDefault(); setDrag(false); if (step === "upload") addFiles(e.dataTransfer.files); }}>
+        <input type="file" multiple accept={importAccept} disabled={step === "loading"} onChange={e => { addFiles(e.target.files); e.target.value = ""; }} />
+        <span className="import-drop-icon">{step === "loading" ? <i className="import-spinner" /> : <Icon name="upload" size={26} />}</span>
+        <strong>{step === "loading" ? "Schülerdaten werden erkannt …" : "Schülerliste hierher ziehen"}</strong>
+        <small>{step === "loading" ? "Tabellen, Scans und Fotos werden automatisch ausgelesen." : <>oder <u>Datei auswählen</u> · Excel, CSV, PDF, JPG oder PNG</>}</small>
+      </label>
+      {rejected.length > 0 && <p className="import-error"><Icon name="info" size={14} /> Nicht unterstütztes Format: {rejected.join(", ")}</p>}
+      {files.length > 0 && <div className="import-files">{files.map(f => <div key={f.name}><span className="cost-symbol"><Icon name="file" /></span><div><strong>{f.name}</strong><small>{fileType(f.name)} · {Math.max(1, Math.round(f.size / 1024))} KB</small></div>{step === "upload" && <button onClick={() => setFiles(files.filter(x => x !== f))} aria-label={`${f.name} entfernen`}><Icon name="x" size={16} /></button>}</div>)}</div>}
+      <div className="import-actions"><small className="muted"><Icon name="lock" size={13} /> Die Dateien werden verschlüsselt übertragen und nach dem Import gelöscht.</small><Button disabled={files.length === 0 || step === "loading"} onClick={runImport}><Icon name="upload" /> {step === "loading" ? "Wird importiert …" : "Importieren"}</Button></div>
+    </section>}
+
+    {step === "review" && <>
+      <div className="billing-metrics"><div className="panel"><span>Erkannte Schüler</span><b>{rows.length}</b><small>aus {files.length} {files.length === 1 ? "Datei" : "Dateien"}</small></div><div className="panel"><span>Vollständig erkannt</span><b>{rows.length - open}</b><small>bereit zum Hinzufügen</small></div><div className="panel"><span>Unklarheiten</span><b>{open}</b><small className={open ? "danger-text" : ""}>{open ? "Bitte prüfen und korrigieren" : "Alles geprüft"}</small></div></div>
+      {open > 0 && <div className="import-notice"><Icon name="info" /><div><strong>{open} {open === 1 ? "Eintrag konnte" : "Einträge konnten"} nicht eindeutig gelesen werden.</strong><span>Markierte Felder direkt korrigieren oder mit „Passt“ bestätigen.</span></div></div>}
+      <div className="data-table panel import-table"><div className="import-row table-head"><span>Name</span><span>Geburtsdatum</span><span>Klasse</span><span>E-Mail</span><span>Telefon</span><span>Status</span></div>
+        {rows.map(r => <div className={r.unclear.length ? "import-row unclear" : "import-row"} key={r.id}>
+          {importFields.map(([field, label]) => { const flagged = r.unclear.includes(field); return <label className={flagged ? "import-cell flagged" : "import-cell"} key={field}><span className="sr-only">{label}</span>
+            {field === "license" ? <select value={r.license} onChange={e => update(r.id, field, e.target.value)}><option value="">Bitte wählen</option>{importLicenses.map(l => <option key={l}>{l}</option>)}</select> : <input value={r[field]} onChange={e => update(r.id, field, e.target.value)} />}
+            {flagged ? <small>{importHints[field]}</small> : field === "name" && <small className="import-source">{r.source}</small>}</label>; })}
+          <span className="import-status">{r.unclear.length ? <><i className="status-tag status-exam">Prüfen</i><button onClick={() => confirm(r.id)}>Passt</button></> : <i className="status-tag status-active">OK</i>}<button className="import-remove" onClick={() => remove(r.id)} aria-label={`${r.name} entfernen`}><Icon name="x" size={14} /></button></span>
+        </div>)}
+        {rows.length === 0 && <p className="import-empty">Keine Einträge mehr vorhanden.</p>}
+      </div>
+      <div className="import-actions"><small className="muted">{missing ? `${missing} ${missing === 1 ? "Eintrag benötigt" : "Einträge benötigen"} noch Name und Klasse.` : open ? "Offene Unklarheiten bitte vor dem Hinzufügen prüfen." : `${rows.length} Schüler werden angelegt und per E-Mail eingeladen.`}</small><Button disabled={rows.length === 0 || open > 0 || missing > 0} onClick={finish}><Icon name="plus" /> Schüler hinzufügen</Button></div>
+    </>}
+  </>;
 }
 
 function OfficeSettings() {
