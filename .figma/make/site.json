@@ -1,0 +1,10 @@
+{
+  "description": "Optimizes driving school operations by connecting students, instructors, and administration in real-time, featuring AI-driven progress predictions.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
